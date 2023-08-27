@@ -9,7 +9,7 @@ function App() {
     { id: number; title: string }[]
   >([]);
   const [progress, setProgress] = useState(0);
-  const [showProgressBar, setShowProgressBar] = useState(true); // New state
+  const [showProgressBar, setShowProgressBar] = useState(true);
 
   const {
     data: todos1Data,
@@ -52,7 +52,7 @@ function App() {
     const currentProgress = (completedQueries / totalQueries) * 100;
     setProgress(currentProgress);
     //hide progress bart after 1sec
-    if (currentProgress === 100) {
+    if (currentProgress === 100) { 
       setTimeout(() => {
         setShowProgressBar(false);
       }, 1000);

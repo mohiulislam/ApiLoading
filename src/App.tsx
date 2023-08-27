@@ -2,12 +2,14 @@ import { useTodos1Query } from "./app/features/threeApi/api1";
 import { useTodos2Query } from "./app/features/threeApi/api2";
 import { useTodos3Query } from "./app/features/threeApi/api3";
 import React, { useState, useEffect } from "react";
+import "./index.css";
 
 function App() {
   const [combinedTodos, setCombinedTodos] = useState<
     { id: number; title: string }[]
   >([]);
   const [progress, setProgress] = useState(0);
+  const [showProgressBar, setShowProgressBar] = useState(true); // New state
 
   const {
     data: todos1Data,
@@ -43,20 +45,30 @@ function App() {
     }
   }, [isSuccess3, todos3Data]);
 
-  //set progress
   useEffect(() => {
     const totalQueries = 3;
     const completedQueries =
       (isSuccess1 ? 1 : 0) + (isSuccess2 ? 1 : 0) + (isSuccess3 ? 1 : 0);
     const currentProgress = (completedQueries / totalQueries) * 100;
     setProgress(currentProgress);
+    //hide progress bart after 1sec
+    if (currentProgress === 100) {
+      setTimeout(() => {
+        setShowProgressBar(false);
+      }, 1000);
+    }
   }, [isSuccess1, isSuccess2, isSuccess3]);
 
-  //sort todos
   const sortedTodos = combinedTodos.slice().sort((a, b) => a.id - b.id);
 
   return (
     <div>
+      {showProgressBar && (
+        <div
+          className="progress-bar"
+          style={{ width: `${progress}%`, backgroundColor: "red" }}
+        ></div>
+      )}
       <div>API Call Progress: {progress.toFixed(2)}%</div>
       {sortedTodos.map((todo) => (
         <div key={todo.id}>{todo.title}</div>
